@@ -21,4 +21,5 @@ phases:
       # push to ECR
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
+      
 
