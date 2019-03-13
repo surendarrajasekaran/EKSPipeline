@@ -18,6 +18,6 @@ phases:
       - kubectl config set-context $(kubectl config current-context) --namespace=$EKS_NAMESPACE
       # update image in deployment
       - ECR_REPO=$(echo $ECR_REPO | sed 's:/:\\\/:g')
-      - sed -i.'' "s/IMAGE_NAME:IMAGE_TAG/$ECR_REPO:$COMMIT_HASH/g" kubespec/deployment.yml
+      - sed -i.'' "s/IMAGE_NAME:IMAGE_TAG/$ECR_REPO:$COMMIT_HASH/g" deployment.yml
       # apply kube specs
-      - kubectl apply -f kubespec/deployment.yml -f kubespec/service.yml
+      - kubectl apply -f deployment.yml -f service.yml
