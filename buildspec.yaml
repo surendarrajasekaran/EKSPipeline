@@ -22,11 +22,6 @@ phases:
       # build lightweight app image which only contains the binary
       - docker build -t $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
-  post_build:
-    commands:
-      # push to ECR
-      - docker push $REPOSITORY_URI:latest
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
       - kubectl create ns $EKS_NAMESPACE || true
       # set current namespace
       - kubectl config set-context $(kubectl config current-context) --namespace=$EKS_NAMESPACE
@@ -35,5 +30,11 @@ phases:
       - sed -i.'' "s/IMAGE_NAME:IMAGE_TAG/$ECR_REPO:$COMMIT_HASH/g" deployment.yml
       # apply kube specs
       - kubectl apply -f deployment.yml -f service.yml
+  post_build:
+    commands:
+      # push to ECR
+      - docker push $REPOSITORY_URI:latest
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      
       
 
