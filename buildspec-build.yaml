@@ -9,6 +9,12 @@ phases:
       - REPOSITORY_URI=695500506655.dkr.ecr.us-east-2.amazonaws.com/base_image
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=latest}
+      - curl -o /usr/local/bin/aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.11.5/2018-12-06/bin/linux/amd64/aws-iam-authenticator
+      - chmod 755 /usr/local/bin/aws-iam-authenticator
+      # update kube config
+      - aws eks --region us-east-2 update-kubeconfig --name Demo
+      # get commit hash
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
   build:
     commands:
       # build go app with static link
